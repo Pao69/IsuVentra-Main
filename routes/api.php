@@ -44,6 +44,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('participations/{id}', 'destroy')->middleware([AdminCheck::class]);
     });
 
+    Route::controller(ParticipationController::class)->group(function () {
+        Route::post('/participations/scan', 'scan');
+        Route::post('/participations/out', 'timeOut');
+    });
+
 
     Route::controller(EventController::class)->group(function () {
         Route::post('events', 'store');
@@ -64,4 +69,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });

@@ -1,0 +1,18 @@
+// src/services/api.js
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: 'http://192.168.100.238:8000/api', // change to your backend base URL
+    headers: {
+        'Accept': 'application/json',
+    },
+});
+
+// attach token automatically if present
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+export default api;

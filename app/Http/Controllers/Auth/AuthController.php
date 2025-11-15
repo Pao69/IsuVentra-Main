@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
@@ -49,6 +50,33 @@ class AuthController extends Controller
             'message' => 'Login successful as '. $user->name,
             'access_token' => $token,
             'token_type' => 'Bearer',
+        ]);
+    }
+
+    public function logout(Request $request){
+        $user = $request->user();
+        // Revoke the token that was used to authenticate the current request
+        $user->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully.'
+        ]);
+    }
+     public function logoutAllUsers(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user->is_admin) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        // Delete all tokens for all users
+        PersonalAccessToken::truncate();
+
+        return response()->json([
+            'message' => 'All users have been logged out successfully.'
         ]);
     }
 }
