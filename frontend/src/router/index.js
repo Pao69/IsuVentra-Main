@@ -56,8 +56,11 @@ router.beforeEach(async (to, from, next) => {
     if (!auth.token) return next({ name: "login", replace: true });
 
     try {
-      // Check token validity via API
-      await api.get("/validate-token"); // throws 401 if invalid
+      // Check token validity via API and update user data
+      const response = await api.get("/validate-token"); // throws 401 if invalid
+      if (response.data.user) {
+        auth.setAuth(response.data.user, auth.token);
+      }
     } catch (err) {
       auth.logout(); // clear token & user data
       return next({ name: "login", replace: true });

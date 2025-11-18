@@ -3,11 +3,19 @@ import { defineStore } from 'pinia';
 import api from "@/services/api";
 
 export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        token: localStorage.getItem('token') || null,
-        user: JSON.parse(localStorage.getItem('user') || 'null'),
-        role: null, // either 'admin' or 'user'
-    }),
+    state: () => {
+        const token = localStorage.getItem('token') || null;
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        let role = null;
+        if (user) {
+            role = (user.is_admin === 1 || user.is_admin === true) ? 'admin' : 'user';
+        }
+        return {
+            token,
+            user,
+            role,
+        };
+    },
     getters: {
         isLoggedIn: (state) => !!state.token,
         isAdmin: (state) => state.role === 'admin',
@@ -19,8 +27,7 @@ export const useAuthStore = defineStore('auth', {
             this.token = token;
 
             // Set role based on user info
-            if (user?.is_admin === 1 || user?.is_admin === true) this.role = 'admin';
-            else this.role = 'user';
+            this.role = (user?.is_admin === 1 || user?.is_admin === true) ? 'admin' : 'user';
 
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', token);

@@ -33,7 +33,11 @@ onMounted(async () => {
   const auth = useAuthStore();
   if (auth.token) {
     try {
-      await api.get('/validate-token');
+      const response = await api.get('/validate-token');
+      // Update user data from server if needed
+      if (response.data.user) {
+        auth.setAuth(response.data.user, auth.token);
+      }
     } catch {
       auth.logout();
     }
