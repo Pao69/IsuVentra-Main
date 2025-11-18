@@ -17,7 +17,7 @@ class AdminCheck
     {
         $user = $request->user();
 
-        if (!$user && $user->is_admin != 1) {
+        if (!$user || $user->is_admin != 1) {
             return response()->json([
                 'message'=> 'Forbidden: Admins only.'
             ], 403);
