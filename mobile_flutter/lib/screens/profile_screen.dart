@@ -15,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<UserProvider>(context, listen: false).loadUser();
     });
   }
@@ -39,19 +39,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        await userProvider.refreshUser();
-                      },
-                      icon: const Icon(Icons.refresh),
-                    ),
+                    // const Text(
+                    //   'Student Profile',
+                    //   style: TextStyle(
+                    //     fontSize: 22,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
+                    // IconButton(
+                    //   onPressed: () async {
+                    //     await userProvider.refreshUser();
+                    //   },
+                    //   icon: const Icon(Icons.refresh),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -215,6 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Remove this on later builds or change it to different one -Shaine
   Widget _buildInfoCard({
     required IconData icon,
     required String label,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'api_service.dart';
 
 class AuthService {
@@ -19,11 +20,11 @@ class AuthService {
           'user': data.containsKey("user") ? data["user"] : null,
         };
       } else {
-        print('Login failed: ${response.statusCode} - ${response.body}');
+        debugPrint('Login failed: ${response.statusCode} - ${response.body}');
         return null;
       }
     } catch (e) {
-      print('Login error: $e');
+      debugPrint('Login error: $e');
       return null;
     }
   }
@@ -42,17 +43,19 @@ class AuthService {
         "password_confirmation": confirmPassword,
       });
 
-      print('Register: ${response.statusCode} - ${response.body}');
+      debugPrint('Register: ${response.statusCode} - ${response.body}');
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         return data;
       } else {
-        print('Register failed: ${response.statusCode} - ${response.body}');
+        debugPrint(
+          'Register failed: ${response.statusCode} - ${response.body}',
+        );
         return null;
       }
     } catch (e) {
-      print('Register error: $e');
+      debugPrint('Register error: $e');
       return null;
     }
   }
@@ -62,7 +65,7 @@ class AuthService {
       final response = await _apiService.post('/logout', {});
       return response.statusCode == 200;
     } catch (e) {
-      print('Logout error: $e');
+      debugPrint('Logout error: $e');
       return false;
     }
   }
@@ -76,7 +79,7 @@ class AuthService {
       }
       return null;
     } catch (e) {
-      print('Get current user error: $e');
+      debugPrint('Get current user error: $e');
       return null;
     }
   }
